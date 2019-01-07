@@ -1,0 +1,38 @@
+﻿<nav class="nav navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Dynamic Menu Example</a>
+        </div>
+        <ul class="nav navbar-nav">
+            @if (Session["menu"] != null)
+            {
+                var menuValue = (List<DynamicMenu_and_Notification.Models.Menus>)Session["menu"];
+                var groupByMenu = menuValue.GroupBy(x => x.MainMenuName).ToList();
+                foreach (var menuList in groupByMenu)
+                {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@menuList.Key<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @foreach (var submenuList in menuList)
+                            {
+                                <li><a href="#">@submenuList.SubMenuName</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+        <ul class="nav navbar-nav navbar-right" id="logout">
+            @if (Session["login"] != null)
+            {
+                <li style="color:red;font-size:30px;">@Html.ActionLink("Logout", "LogOff", "Home")</li>
+            }
+            else
+            {
+                <li  style="color:red;font-size:30px;">@Html.ActionLink("Login", "Login", "Home")</li>
+            }
+
+        </ul>
+    </div>
+</nav>
+

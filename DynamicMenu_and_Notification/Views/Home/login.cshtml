@@ -1,0 +1,64 @@
+﻿@model DynamicMenu_and_Notification.Models.Login
+@{
+    ViewBag.Title = "login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" style="margin-top:5px;">
+    <fieldset>
+        <form id="submitForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>UserName:</label>
+                    <input type="text" id="UserName" class="form-control" name="UserName" value="@Model.UserName" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Password:</label>
+                    <input type="text" id="Password" class="form-control" name="Password" value="@Model.Password" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1">
+                    <input type="button" id="btnsave" class="btn btn-danger" name="btnsave" value="Submit" />
+                </div>
+                <div class="col-md-2" id="forgetpassword">
+                    <a href="@Url.Action("ForgotPassword","Home")" onclick="forgetPassword()">Forget Password?</a>
+                </div>
+                <div class="col-md-2">
+                    <a class="btn btn-default btn-block" href="@Url.Action("SignIn", new { type = "Google" })"><i class="fa fa-google"></i>&nbsp;&nbsp;Login using Google</a>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script>
+    $("#btnsave").on('click', function () {
+        var formData = $("#submitForm").serialize();
+        var urlToSaveData = "@Url.Action("login", "Home")"+ "?" + formData;
+        $.post(urlToSaveData, function (data) {
+            if (data.status) {
+                alert("Login Sucessfully");
+                window.location.href = "@Url.Action("Index", "Home")";
+
+            }
+            else {
+                alert(data.Message);
+            }
+        })
+    })
+    function forgetPassword() {
+        var urltoforegtpassword = "@Url.Action("ForgotPassword", "Home")";
+        $.get(urltoforegtpassword, function (data) {
+            return false;
+        })
+    }
+    $("#btngoogle").click(function () {
+        window.location.href = "@Url.Action("SignIn", "Home")";
+    })
+</script>
+
